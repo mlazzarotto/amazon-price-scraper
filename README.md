@@ -1,2 +1,2 @@
 # python-amazon-scraper
-Amazon scraper writter in Python
+Amazon scraper written in Python

@@ -3,6 +3,7 @@ import smtplib
 import json
 import os
 import sys
+import time
 from random import randrange
 from email.mime.text import MIMEText
 from bs4 import BeautifulSoup
@@ -69,4 +70,6 @@ def send_email(title, price):
     server.quit()
 
 
-check_price()
+while True:
+    check_price()
+    time.sleep(5 * 60)

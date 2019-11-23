@@ -1,6 +1,8 @@
 import requests
 import smtplib
 import json
+import os
+import sys
 from random import randrange
 from email.mime.text import MIMEText
 from bs4 import BeautifulSoup
@@ -10,7 +12,7 @@ URL = 'https://www.amazon.it/Xiaomi-Mi-4GB-64GB-Version/dp/B07VD3JH2C'
 
 def get_user_agent():
     # Funzione che legge gli user agents da un file json
-    with open('user_agents.json') as json_file:
+    with open(os.path.join(sys.path[0], 'user_agents.json')) as json_file:
         user_agents = json.load(json_file)
 
     return (user_agents[randrange(len(user_agents))]['useragent'])

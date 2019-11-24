@@ -22,8 +22,9 @@ def get_user_agent():
     try:
         with open(os.path.join(sys.path[0], 'user_agents.json')) as json_file:
             user_agents = json.load(json_file)
-    except:
+    except OSError:
         print ('Cannot read the JSON file')
+        sys.exit()
 
     return (user_agents[randrange(len(user_agents))]['useragent'])
 

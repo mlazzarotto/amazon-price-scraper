@@ -22,8 +22,8 @@ def get_user_agent():
     try:
         with open(os.path.join(sys.path[0], 'user_agents.json')) as json_file:
             user_agents = json.load(json_file)
-    except OSError:
-        print ('Cannot read the JSON file')
+    except OSError as e:
+        print ('Cannot read the JSON file \n', e)
         sys.exit()
 
     return (user_agents[randrange(len(user_agents))]['useragent'])
@@ -39,8 +39,8 @@ def check_price():
     try:
         title = soup.find(id="productTitle").get_text()
         price = soup.find(id="priceblock_ourprice").get_text()
-    except:
-        print("Cannot get the title or price for the item")
+    except e:
+        print("Cannot get the title or price for the item\n", e)
         sys.exit()
 
 

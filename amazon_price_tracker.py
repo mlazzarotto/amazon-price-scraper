@@ -8,11 +8,17 @@ from random import randrange
 from email.mime.text import MIMEText
 from bs4 import BeautifulSoup
 
+# TODO: add the possibility to check multiple Amazon items
+# TODO: load the email account info from external file (not hard coded)
+# TODO: add check if Amazon shows the captcha
+# TODO: 
+
+
 URL = 'https://www.amazon.it/Xiaomi-Mi-4GB-64GB-Version/dp/B07VD3JH2C'
 
 
 def get_user_agent():
-    # Funzione che legge gli user agents da un file json
+    # Function that reads user agents from a json file
     with open(os.path.join(sys.path[0], 'user_agents.json')) as json_file:
         user_agents = json.load(json_file)
 
@@ -20,8 +26,7 @@ def get_user_agent():
 
 
 def check_price():
-    # Funzione che controlla il prezzo
-    # Se il prezzo è minore di x, chiama il metodo send_email()
+    # Function that checks price
     headers = {"User-agent": get_user_agent()}
 
     page = requests.get(URL, headers=headers)
@@ -31,8 +36,6 @@ def check_price():
     price = soup.find(id="priceblock_ourprice").get_text()
 
     converted_price = float(price[0:6].replace(',', '.'))
-    # print("Title is: {}".format(title.strip()))
-    # print("Price is: {}".format(converted_price))
 
     if (converted_price < 1155):
         send_email(title.strip(), converted_price)
@@ -43,9 +46,9 @@ def check_price():
 
 def send_email(title, price):
 
-    # Funzione per l'invio di email
-    # @title = titolo del oggetto da controllare
-    # @price = prezzo dell'oggetto
+    # Email sending function
+    # @title = title of the item
+    # @price = price of the item
 
     server = smtplib.SMTP('smtp.gmail.com', 587)
     server.ehlo()
@@ -54,8 +57,8 @@ def send_email(title, price):
 
     server.login('***REMOVED***', '***REMOVED***')
 
-    subject = 'Il prezzo di {} e\' {}'.format(title, price)
-    body = 'Controlla subito su Amazon al link \n {}'.format(URL)
+    subject = 'The price for {} is {}'.format(title, price)
+    body = 'Check it now on Amazon at link \n {}'.format(URL)
 
     msg = "Subject: {} \n\n {}".format(subject, body)
 
@@ -66,7 +69,7 @@ def send_email(title, price):
         '***REMOVED***',
         msg
     )
-    print('EHI! HO SPEDITO L\'EMAIL')
+    print('Hey! I\'ve just sent the email')
     server.quit()
 
 

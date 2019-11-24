@@ -19,8 +19,11 @@ URL = 'https://www.amazon.it/Xiaomi-Mi-4GB-64GB-Version/dp/B07VD3JH2C'
 
 def get_user_agent():
     # Function that reads user agents from a json file
-    with open(os.path.join(sys.path[0], 'user_agents.json')) as json_file:
-        user_agents = json.load(json_file)
+    try:
+        with open(os.path.join(sys.path[0], 'user_agents.json')) as json_file:
+            user_agents = json.load(json_file)
+    except:
+        print ('Cannot read the JSON file')
 
     return (user_agents[randrange(len(user_agents))]['useragent'])
 
@@ -32,8 +35,13 @@ def check_price():
     page = requests.get(URL, headers=headers)
     soup = BeautifulSoup(page.content, 'html.parser')
 
-    title = soup.find(id="productTitle").get_text()
-    price = soup.find(id="priceblock_ourprice").get_text()
+    try:
+        title = soup.find(id="productTitle").get_text()
+        price = soup.find(id="priceblock_ourprice").get_text()
+    except:
+        print("Cannot get the title or price for the item")
+        sys.exit()
+
 
     converted_price = float(price[0:6].replace(',', '.'))
 

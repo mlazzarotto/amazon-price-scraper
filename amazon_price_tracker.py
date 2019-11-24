@@ -10,9 +10,6 @@ from bs4 import BeautifulSoup
 
 # TODO: add the possibility to check multiple Amazon items
 # TODO: load the email account info from external file (not hard coded)
-# TODO: add check if Amazon shows the captcha
-# TODO: 
-
 
 URL = 'https://www.amazon.it/Xiaomi-Mi-4GB-64GB-Version/dp/B07VD3JH2C'
 
@@ -39,18 +36,16 @@ def check_price():
     try:
         title = soup.find(id="productTitle").get_text()
         price = soup.find(id="priceblock_ourprice").get_text()
-    except e:
-        print("Cannot get the title or price for the item\n", e)
-        sys.exit()
+    except AttributeError as e:
+        print("Cannot get the title or price for the item, probably Amazon is showing a captcha\n", e)
+        pass
+    else:
+            converted_price = float(price[0:6].replace(',', '.'))
+            if (converted_price < 1155):
+                send_email(title.strip(), converted_price)
 
-
-    converted_price = float(price[0:6].replace(',', '.'))
-
-    if (converted_price < 1155):
-        send_email(title.strip(), converted_price)
-
-    print(title.strip())
-    print(converted_price)
+            print(title.strip())
+            print(converted_price)
 
 
 def send_email(title, price):
@@ -83,5 +78,8 @@ def send_email(title, price):
 
 
 while True:
-    check_price()
+    try:
+        check_price()
+    except:
+        pass
     time.sleep(5 * 60)

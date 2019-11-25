@@ -29,9 +29,10 @@ def get_user_agent():
 
     return (user_agents[randrange(len(user_agents))]['useragent'])
 
-
 def check_price(amazon_item):
     # Function that checks price
+    time.sleep(randrange(0,15))
+
     headers = {"User-agent": get_user_agent()}
 
     page = requests.get(amazon_item.url, headers=headers)
@@ -50,7 +51,6 @@ def check_price(amazon_item):
         
         print(amazon_item.name)
         print(converted_price)
-
 
 def send_email(amazon_item, price):
 
@@ -81,12 +81,17 @@ def send_email(amazon_item, price):
     server.quit()
 
 
-ai1 = AmazonItem(
-    'MI A3', 'https://www.amazon.it/Xiaomi-Mi-4GB-64GB-Version/dp/B07VD3JH2C', 155)
+items_list = []
+items_list.append(AmazonItem('MI A3', 'https://www.amazon.it/Xiaomi-Mi-4GB-64GB-Version/dp/B07VD3JH2C', 155))
+items_list.append(AmazonItem('Striscia LED Wifi BRLTX', 'https://www.amazon.it/BRTLX-Striscia-Impermeabile-intelligente-controllato/dp/B07KHX5T58', 23))
+items_list.append(AmazonItem('Striscia LED Wifi Onforu', 'https://www.amazon.it/Onforu-Compatibile-Telecomando-Alimentatore-Illuminazione/dp/B07S15QLT7', 24))
+items_list.append(AmazonItem('Striscia LED Wifi Bawoo', 'https://www.amazon.it/Impermeabile-Illuminazione-Bawoo-Assistant-Telecomando/dp/B078SNWRS4', 24))
+
 
 while True:
     try:
-        check_price(ai1)
+        for item in items_list: 
+            check_price(item)
     except:
         pass
-    time.sleep(5 * 601)
+    time.sleep(5 * 1)

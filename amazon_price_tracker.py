@@ -94,4 +94,4 @@ while True:
             check_price(item)
     except:
         pass
-    time.sleep(5 * 1)
+    time.sleep(5 * 60)

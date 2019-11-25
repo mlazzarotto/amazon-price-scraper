@@ -11,8 +11,12 @@ from bs4 import BeautifulSoup
 # TODO: add the possibility to check multiple Amazon items
 # TODO: load the email account info from external file (not hard coded)
 
-URL = 'https://www.amazon.it/Xiaomi-Mi-4GB-64GB-Version/dp/B07VD3JH2C'
 
+class AmazonItem:
+    def __init__(self, name, url, desired_price):
+        self.name = name
+        self.url = url
+        self.desired_price = desired_price
 
 def get_user_agent():
     # Function that reads user agents from a json file
@@ -20,38 +24,38 @@ def get_user_agent():
         with open(os.path.join(sys.path[0], 'user_agents.json')) as json_file:
             user_agents = json.load(json_file)
     except OSError as e:
-        print ('Cannot read the JSON file \n', e)
+        print('Cannot read the JSON file \n', e)
         sys.exit()
 
     return (user_agents[randrange(len(user_agents))]['useragent'])
 
 
-def check_price():
+def check_price(amazon_item):
     # Function that checks price
     headers = {"User-agent": get_user_agent()}
 
-    page = requests.get(URL, headers=headers)
+    page = requests.get(amazon_item.url, headers=headers)
     soup = BeautifulSoup(page.content, 'html.parser')
 
     try:
-        title = soup.find(id="productTitle").get_text()
         price = soup.find(id="priceblock_ourprice").get_text()
     except AttributeError as e:
         print("Cannot get the title or price for the item, probably Amazon is showing a captcha\n", e)
+        print('I\'ll try again in a few minutes')
         pass
     else:
-            converted_price = float(price[0:6].replace(',', '.'))
-            if (converted_price < 1155):
-                send_email(title.strip(), converted_price)
+        converted_price = float(price[0:6].replace(',', '.'))
+        if (converted_price < amazon_item.desired_price):
+            send_email(amazon_item, converted_price)
+        
+        print(amazon_item.name)
+        print(converted_price)
 
-            print(title.strip())
-            print(converted_price)
 
-
-def send_email(title, price):
+def send_email(amazon_item, price):
 
     # Email sending function
-    # @title = title of the item
+    # @name = name of the item
     # @price = price of the item
 
     server = smtplib.SMTP('smtp.gmail.com', 587)
@@ -61,8 +65,8 @@ def send_email(title, price):
 
     server.login('***REMOVED***', '***REMOVED***')
 
-    subject = 'The price for {} is {}'.format(title, price)
-    body = 'Check it now on Amazon at link \n {}'.format(URL)
+    subject = 'The price for {} is {}'.format(amazon_item.name, price)
+    body = 'Check it now on Amazon at link \n {}'.format(amazon_item.url)
 
     msg = "Subject: {} \n\n {}".format(subject, body)
 
@@ -77,9 +81,12 @@ def send_email(title, price):
     server.quit()
 
 
+ai1 = AmazonItem(
+    'MI A3', 'https://www.amazon.it/Xiaomi-Mi-4GB-64GB-Version/dp/B07VD3JH2C', 155)
+
 while True:
     try:
-        check_price()
+        check_price(ai1)
     except:
         pass
-    time.sleep(5 * 60)
+    time.sleep(5 * 601)

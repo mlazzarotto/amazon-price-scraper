@@ -1,0 +1,29 @@
+{
+  "items": [
+    {
+      "name": "MI A3",
+      "url": "https://www.amazon.it/Xiaomi-Mi-4GB-64GB-Version/dp/B07VD3JH2C",
+      "desired_price": 155.5
+    },
+    {
+      "name": "Striscia LED Wifi BRLTX",
+      "url": "https://www.amazon.it/BRTLX-Striscia-Impermeabile-intelligente-controllato/dp/B07KHX5T58",
+      "desired_price": 23.2
+    },
+    {
+      "name": "Striscia LED Wifi Onforu",
+      "url": "https://www.amazon.it/Onforu-Compatibile-Telecomando-Alimentatore-Illuminazione/dp/B07S15QLT7",
+      "desired_price": 23.7
+    }
+  ],
+  "email_settings": [
+    {
+      "sender": "***REMOVED***",
+      "recipient": "***REMOVED***",
+      "smtp_server": "smtp.gmail.com",
+      "smtp_port": 587,
+      "smtp_username": "***REMOVED***",
+      "smtp_password": "***REMOVED***"
+    }
+  ]
+}

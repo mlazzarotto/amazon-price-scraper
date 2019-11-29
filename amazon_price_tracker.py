@@ -72,21 +72,19 @@ def send_email(amazon_item, price):
         print('Cannot read the settings.json file \n', e)
         sys.exit()
 
-    # Email server settings taken from the JSON file
-    email_settings = settings['email_settings']
-    sender = email_settings[0]['sender']
-    recipient = email_settings[0]['recipient']
-    smtp_server = email_settings[0]['smtp_server']
-    smtp_port = email_settings[0]['smtp_port']
-    smtp_username = email_settings[0]['smtp_username']
-    smtp_password = email_settings[0]['smtp_password']
+    # # Email server settings taken from the JSON file
+    email_settings_json = settings['email_settings']
+    email_params = {}
+    for p in email_settings_json[0]:
+        email_params[p] = email_settings_json[0][p]
+
 
     # Establishing the connection with the smtp server
-    server = smtplib.SMTP(smtp_server, smtp_port)
+    server = smtplib.SMTP(email_params['smtp_server'], email_params['smtp_port'])
     server.ehlo()
     server.starttls()
     server.ehlo()
-    server.login(smtp_username, smtp_password)
+    server.login(email_params['smtp_username'], email_params['smtp_password'])
 
     subject = 'The price for {} is {}'.format(amazon_item.name, price)
     body = 'Check it now on Amazon at link \n {}'.format(amazon_item.url)
@@ -95,13 +93,14 @@ def send_email(amazon_item, price):
     msg = "Subject: {} \n\n {}".format(subject, body)
 
     server.sendmail(
-        sender,
-        recipient,
+        email_params['sender'],
+        email_params['recipient'],
         msg
     )
     
     print('Hey! I\'ve just sent the email')
     server.quit()
+    json_file.close()
 
 
 # List of Amazon items to check

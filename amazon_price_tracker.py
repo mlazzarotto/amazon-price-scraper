@@ -5,7 +5,6 @@ import os
 import sys
 import time
 from random import randrange
-from email.mime.text import MIMEText
 from bs4 import BeautifulSoup
 
 # TODO: add the possibility to check multiple Amazon items

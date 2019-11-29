@@ -114,6 +114,6 @@ while True:
     try:
         for item in items_list:
             check_price(item)
-    except:
-        pass
+    except KeyboardInterrupt:
+        sys.exit()
     time.sleep(0)

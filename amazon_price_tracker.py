@@ -7,10 +7,6 @@ import time
 from random import randrange
 from bs4 import BeautifulSoup
 
-# TODO: add the possibility to check multiple Amazon items
-# TODO: load the email account info from external file (not hard coded)
-
-
 class AmazonItem:
     def __init__(self, name, url, desired_price):
         self.name = name
@@ -37,7 +33,7 @@ def check_price(amazon_item):
     """ Function that checks price
     Takes an AmazonItem instance as parameter
     """
-    time.sleep(randrange(15))
+    time.sleep(randrange(30))
 
     headers = {"User-agent": get_user_agent()}
 
@@ -45,10 +41,10 @@ def check_price(amazon_item):
     soup = BeautifulSoup(page.content, 'html.parser')
 
     try:
-        price = soup.find(id="priceblock_ourprice").get_text()
-    except AttributeError as e:
-        print("Cannot get the title or price for the item, probably Amazon is showing a captcha\n", e)
-        print('I\'ll try again in a few minutes')
+        # price = soup.find(id="priceblock_ourprice").get_text()
+        price = soup.find(id="priceblock_dealprice").get_text()
+    except AttributeError:
+        print("Cannot get the title or price for the item, probably Amazon is showing a captcha\n")
         pass
     else:
         converted_price = float(price[0:6].replace(',', '.'))
@@ -77,7 +73,6 @@ def send_email(amazon_item, price):
     email_params = {}
     for p in email_settings_json[0]:
         email_params[p] = email_settings_json[0][p]
-
 
     # Establishing the connection with the smtp server
     server = smtplib.SMTP(email_params['smtp_server'], email_params['smtp_port'])
@@ -114,11 +109,11 @@ items_list.append(AmazonItem('Striscia LED Wifi Onforu',
 items_list.append(AmazonItem('Striscia LED Wifi Bawoo',
                              'https://www.amazon.it/Impermeabile-Illuminazione-Bawoo-Assistant-Telecomando/dp/B078SNWRS4', 240))
 
-# Every 30 seconds I try to check the prices
+# I try to check the prices
 while True:    
     try:
         for item in items_list:
             check_price(item)
     except:
         pass
-    time.sleep(5 * 6)
+    time.sleep(0)

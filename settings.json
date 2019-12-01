@@ -18,12 +18,12 @@
   ],
   "email_settings": [
     {
-      "sender": "***REMOVED***",
-      "recipient": "***REMOVED***",
-      "smtp_server": "smtp.gmail.com",
+      "sender": "insert sender address here",
+      "recipient": "insert recipient address here",
+      "smtp_server": "insert smtp server here",
       "smtp_port": 587,
-      "smtp_username": "***REMOVED***",
-      "smtp_password": "***REMOVED***"
+      "smtp_username": "insert smtp username here",
+      "smtp_password": "insert smtp password here"
     }
   ]
 }
